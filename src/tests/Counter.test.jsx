@@ -4,60 +4,74 @@ import userEvent from "@testing-library/user-event";
 import { describe, expect, it } from "vitest";
 
 /*
-Test that the initial count is rendered correctly based on the initialCount prop.
-Test that clicking the "Increment" button increases the count.
-Test that clicking the "Decrement" button decreases the count.
-Test that the count cannot go below zero (add this logic to the component).
+Tests for the Counter component:
+- Verify the component renders correctly.
+- Ensure the initial count is displayed based on the `initialCount` prop.
+- Test that the "Increment" button increases the count.
+- Test that the "Decrement" button decreases the count.
+- Verify that the count does not go below zero.
 */
 
 describe("Counter", () => {
   it("renders the Counter component", () => {
-    render(<Counter />);
+    // Render the Counter component
+    render(<Counter initialCount={0} />);
 
-    screen.debug(); // prints out the jsx in the App component unto the command line
+    // Use debug to print the component's structure for verification
+    screen.debug();
   });
 
-  it("renders the initial count correctly based on the initialCount prop", async () => {
+  it("renders the initial count correctly based on the initialCount prop", () => {
+    // Render the Counter component with an initial count of 1
     render(<Counter initialCount={1} />);
 
+    // Assert that the initial count is rendered correctly
     const counterEl = screen.getByText(/1/);
-
-    expect(!!counterEl).toBeTruthy();
+    expect(counterEl).toBeInTheDocument();
   });
 
   it("increments the count when the increment button is clicked", async () => {
-    const { getByText } = render(<Counter initialCount={0} />);
+    // Render the Counter component with an initial count of 0
+    render(<Counter initialCount={0} />);
 
-    const incrementButtonEl = getByText(/Increment/);
+    // Find the increment button
+    const incrementButtonEl = screen.getByText("Increment");
 
+    // Simulate a click on the increment button
     await userEvent.click(incrementButtonEl);
 
-    const counterEl = getByText(/1/);
-
-    expect(!!counterEl).toBeTruthy();
+    // Assert that the count has incremented to 1
+    const counterEl = screen.getByText(/1/);
+    expect(counterEl).toBeInTheDocument();
   });
 
   it("decrements the count when the decrement button is clicked", async () => {
-    const { getByText } = render(<Counter initialCount={1} />);
+    // Render the Counter component with an initial count of 1
+    render(<Counter initialCount={1} />);
 
-    const decrementButtonEl = getByText(/Decrement/);
+    // Find the decrement button
+    const decrementButtonEl = screen.getByText("Decrement");
 
+    // Simulate a click on the decrement button
     await userEvent.click(decrementButtonEl);
 
-    const counterEl = getByText(/0/);
-
-    expect(!!counterEl).toBeTruthy();
+    // Assert that the count has decremented to 0
+    const counterEl = screen.getByText(/0/);
+    expect(counterEl).toBeInTheDocument();
   });
 
   it("does not decrement below zero", async () => {
-    const { getByText } = render(<Counter initialCount={0} />);
+    // Render the Counter component with an initial count of 0
+    render(<Counter initialCount={0} />);
 
-    const decrementButtonEl = getByText(/Decrement/);
+    // Find the decrement button
+    const decrementButtonEl = screen.getByText("Decrement");
 
+    // Simulate a click on the decrement button
     await userEvent.click(decrementButtonEl);
 
-    const counterEl = getByText(/0/);
-
-    expect(!!counterEl).toBeTruthy();
+    // Assert that the count is still 0 and does not go below zero
+    const counterEl = screen.getByText(/0/);
+    expect(counterEl).toBeInTheDocument();
   });
 });

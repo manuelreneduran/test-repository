@@ -4,38 +4,47 @@ import { describe, expect, it } from "vitest";
 import { LoginForm } from "../components/Form";
 
 /*
-Test that typing in the input fields updates their values.
-Test that the "Submit" button is disabled if either field is empty.
-Test that the handleSubmit function is called with the correct form values.
-Mock console.log and test that the form values are logged correctly.
+Tests for the LoginForm component:
+- Ensure typing in input fields updates their values.
+- Verify that the "Submit" button is disabled if either input field is empty.
+- Check that the handleSubmit function is called with the correct form values (to be implemented).
+- Mock `console.log` and validate that the form values are logged correctly (to be implemented).
 */
 
 describe("Form", () => {
   it("updates input fields when user types", async () => {
-    const testVal = "test";
-    // get input element
+    const testVal = "test@example.com";
+
+    // Render the LoginForm component.
     const { getByLabelText } = render(<LoginForm />);
+
+    // Get the email input field by its label.
     const inputEl = getByLabelText("Email:");
 
-    // type in it
+    // Simulate user typing in the email input field.
     await userEvent.type(inputEl, testVal);
 
-    // get the value
+    // Assert that the input field's value is updated to the typed value.
     expect(inputEl.value).toBe(testVal);
   });
 
   it("disables submit if either field is empty", async () => {
-    const testVal = "test";
+    const testVal = "test@example.com";
 
+    // Render the LoginForm component.
     const { getByRole, getAllByRole } = render(<LoginForm />);
+
+    // Get all text input fields.
     const inputs = getAllByRole("textbox");
 
+    // Get the email input field and type a value.
     const emailInputEl = inputs[0];
-
     await userEvent.type(emailInputEl, testVal);
 
+    // Get the submit button.
     const buttonEl = getByRole("button");
 
+    // Assert that the submit button is disabled since one field is still empty.
     expect(buttonEl).toBeDisabled();
   });
 });
